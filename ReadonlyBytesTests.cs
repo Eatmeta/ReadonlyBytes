@@ -1,5 +1,4 @@
 using System;
-using System.Collections.Generic;
 using System.Linq;
 using NUnit.Framework;
 
@@ -53,11 +52,7 @@ namespace hashes
         {
             var data = new ReadonlyBytes(1, 2, 3);
 
-            var list = new List<byte>();
-            foreach (var x in data)
-            {
-                list.Add(x);
-            }
+            var list = data.ToList();
 
             Assert.AreEqual(new byte[] { 1, 2, 3 }, list);
         }
@@ -66,7 +61,7 @@ namespace hashes
         public void EqualOnSameBytes()
         {
             // ReSharper disable EqualExpressionComparison
-            Assert.IsTrue(new ReadonlyBytes(new byte[0]).Equals(new ReadonlyBytes(new byte[0])));
+            Assert.IsTrue(new ReadonlyBytes(Array.Empty<byte>()).Equals(new ReadonlyBytes(Array.Empty<byte>())));
             Assert.IsTrue(new ReadonlyBytes(100).Equals(new ReadonlyBytes(100)));
             Assert.IsTrue(new ReadonlyBytes(1, 2, 3).Equals(new ReadonlyBytes(1, 2, 3)));
             var items = new ReadonlyBytes(4, 2, 67, 1);
@@ -121,7 +116,7 @@ namespace hashes
         {
             var items = new ReadonlyBytes(Enumerable.Repeat((byte)6, 100000).ToArray());
             var hash = items.GetHashCode();
-            for (int i = 0; i < 100000; i++)
+            for (var i = 0; i < 100000; i++)
                 Assert.AreEqual(hash, items.GetHashCode());
         }
 
